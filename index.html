@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+
+        <title>Unit testing JavaScript using Mocha and Node.js</title>
+
+        <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+        <meta name="author" content="Hakim El Hattab">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/serif.css" id="theme">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+        <script>
+            document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+        </script>
+
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+
+        <div class="reveal">
+
+            <div class="slides">
+                <section>
+                    <h1>Unit testing JavaScript</h1>
+                    <h2>using Mocha and Node.js</h2>
+                </section>
+
+                <section>
+                    <h2>Josh Mock</h2>
+                    <ul>
+                        <li>Senior JavaScript architect at Emma</li>
+                        <li>Twitter: <a href="https://twitter.com/JoshMock">@JoshMock</a></li>
+                        <li>Email: <a href="mailto:josh@joshmock.com">josh@joshmock.com</a></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>What is unit testing?</h2>
+                    <ul>
+                        <li class="fragment">Write code to test code</li>
+                        <li class="fragment">Ensures code works as expected</li>
+                        <li class="fragment">Granular, single-focus assertions</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>Why unit test?</h2>
+                    <ul>
+                        <li class="fragment">Confidence</li>
+                        <li class="fragment">Easier refactoring</li>
+                        <li class="fragment">Less regression</li>
+                        <li class="fragment">Less complexity</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>What is Node.js?</h2>
+                        <div><a href="http://nodejs.org/"><img src="img/nodejs.png" alt="Node.js" /></a></div>
+                    </section>
+
+                    <section>
+                        <h2>Install Node.js</h2>
+                        <p><a href="http://node.js.org/download/">node.js.org/download/</a></p>
+                        <p><br />OS X (with Homebrew installed):</p>
+                        <pre><code data-trim>brew install node</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>What is Mocha?</h2>
+                        <div><a href="http://visionmedia.github.io/mocha/"><img src="img/mocha.png" alt="Mocha" /></a></div>
+                    </section>
+
+                    <section>
+                        <h2>Install Mocha</h2>
+                        <pre><code data-trim>npm install -g mocha</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Test some code!</h2>
+                        <pre><code class="javascript" data-trim contenteditable>
+var Car = function () {
+    this.make = "Honda";
+    this.model = "Civic";
+};
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <pre><code class="javascript" data-trim contenteditable>
+var assert = require("assert");
+
+describe("Car", function () {
+    describe("constructor", function () {
+        it("should default the car to be a Honda Civic");
+    });
+
+    describe("makeAndModel", function () {
+        it("should return a string containing the make and model");
+    });
+});
+                        </code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Run, tests, run</h2>
+                        <p><img src="img/run-forrest-run-o.gif" alt="" /></p>
+                        <pre><code class="bash" data-trim>mocha path/to/test/file.js</code></pre>
+                    </section>
+
+                    <section>
+                        <p><img src="img/pending-tests.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/tests-pass.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/test-fails.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/lots-of-tests.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/reporter-progress.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/reporter-landing.png" alt="" /></p>
+                    </section>
+
+                    <section>
+                        <p><img src="img/reporter-nyan.png" alt="" /></p>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>How to write good tests</h2>
+                    <ul>
+                        <li class="fragment">Test results, not internals</li>
+                        <li class="fragment">One focus per test</li>
+                        <li class="fragment">Testing DOM changes is bold<br /><img src="img/dom-manipulations.jpg" alt="" /></li>
+                    </ul>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>How to write testable code</h2>
+                    </section>
+
+                    <section>
+                        <h3>Simple, single-purpose functions</h3>
+                        <pre><code class="javascript" data-trim>
+// bad
+var numbers = {
+    list: [1, 2, 3],
+    add: function (newNum) {
+        this.list.push(newNum);
+        this.list.sort();
+    }
+};
+
+// good
+var numbers = {
+    list: [1, 2, 3],
+    add: function (newNum) {
+        this.list.push(newNum);
+    },
+    sort: function () {
+        this.list.sort();
+    }
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Avoid tight coupling of components</h3>
+                        <pre><code class="javascript" data-trim>
+var numbers = {
+    list: [1, 2, 3],
+    add: function (newNum) {
+        this.list.push(newNum);
+    }
+};
+
+// bad
+var math = {
+    add: function () {
+        var total = 0;
+        for (var i = 0; i < numbers.list.length; i++) {
+            total += numbers.list[i];
+        }
+        return total;
+    },
+    average: function () {
+        return this.add() / numbers.list.length;
+    }
+};
+
+alert(math.average());
+
+// good
+var math = {
+    add: function (numList) {
+        var total = 0;
+        for (var i = 0; i < numList.length; i++) {
+            total += numList[i];
+        }
+        return total;
+    },
+    average: function (numList) {
+        return this.add(numList) / numList.length;
+    }
+};
+
+alert(math.average(numbers.list));
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Separate business logic from UI</h3>
+                        <h4>(and avoid anonymous functions/callbacks)</h4>
+                        <pre><code class="javascript" data-trim>
+var numbers = [2, 4, 1, 3, 5];
+
+// bad
+$("a.sort-numbers").on("click", function (e) {
+    e.preventDefault();
+    numbers.sort();
+});
+
+// good
+var sortNumbers = function (e) {
+    e && e.preventDefault && e.preventDefault();
+    numbers.sort();
+};
+$("a.sort-numbers").on("click", sortNumbers);
+</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>Advanced stuff!</h2>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Asynchronous tests</h2>
+                    </section>
+
+                    <section>
+                        <pre><code class="javascript" data-trim>
+var asyncSort = function (numbers, callback) {
+    setTimeout(function () {
+        callback(numbers.sort());
+    }, 10);
+};
+</code></pre>
+                    </section>
+
+                    <section>
+                        <pre><code class="javascript" data-trim>
+define("asyncSort", function () {
+    it("should sort my numbers", function (done) {
+        asyncSort([1, 3, 2], function (result) {
+            assert.deepEqual(result, [1, 2, 3]);
+            done();
+        });
+    });
+});
+</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Sinon.js</h2>
+                    </section>
+
+                    <section>
+                        <h3>Spies</h3>
+                        <pre><code class="javascript" data-trim>
+var sinon = require("sinon");
+
+it("runs jQuery.ajax", function () {
+    sinon.spy($, "ajax");
+    doAjaxCall();
+    assert($.ajax.calledOnce);
+    $.ajax.restore();
+});
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Stubs</h3>
+                        <pre><code class="javascript" data-trim>
+var sinon = require("sinon");
+
+it("returns the age of a person with data stored in the database", function () {
+    Database.get = sinon.stub().returns({
+        name: "Joe",
+        age: 33
+    });
+
+    var getAge = function () {
+        return Database.get("Joe").age;
+    };
+
+    assert.equals(getAge(), 33);
+});
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Mocks</h3>
+                        <pre><code class="javascript" data-trim>
+var sinon = require("sinon");
+
+it("should get the desired car from the database", function () {
+    var mock = sinon.mock(Database);
+
+    mock
+        .expects("getCar")
+        .withExactArgs("Honda Civic")
+        .once()
+
+    var car = new Car();
+    car.get("Honda Civic");
+
+    assert(mock.verify());
+});
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Fake timers</h3>
+                        <pre><code class="javascript" data-trim>
+var sinon = require("sinon");
+
+it("should save after 30 seconds", function () {
+    var clock = sinon.useFakeTimers();
+
+    sinon.spy($, "ajax");
+
+    delayedSave();
+    clock.tick(30001);
+
+    assert($.fn.ajax.called);
+
+    $.ajax.restore();
+});
+</code></pre>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>jsdom and node-jquery</h2>
+                        <ul>
+                            <li class="fragment">Test browser-dependent code</li>
+                            <li class="fragment">Make Node think it's a browser</li>
+                            <li class="fragment">Test jQuery DOM manipulations</li>
+                            <li class="fragment">
+                                Go through all stages of grief getting it to work<br />
+                                <img src="img/kicksad.gif" alt="" />
+                            </li>
+                            <li class="fragment">Ponder using a browser-based framework instead</li>
+                        </ul>
+
+                    </section>
+
+                    <section>
+                        <h3>Install</h3>
+                        <pre><code class="bash" data-trim>npm install -g jsdom && npm install -g jquery</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Set up</h3>
+                        <pre><code class="javascript" data-trim>
+GLOBAL.document = require("jsdom").jsdom();
+GLOBAL.window = document.createWindow();
+GLOBAL.$ = GLOBAL.jQuery = require("jquery").create(window);
+</code></pre>
+                    </section>
+
+                    <section>
+                        <h3>Use</h3>
+                        <pre><code class="javascript" data-trim>
+it("should change div background color to blue", function () {
+    $("body").html('<div id='mydiv'></div>');
+    $("#mydiv").css("background", "blue");
+    assert.equal($("#mydiv").css("background"), "blue");
+});
+</code></pre>
+                    </section>
+
+                    <section>
+                        <ul>
+                            <li>No headless browser</li>
+                            <li>No GUI running in background</li>
+                            <li>No guarantees</li>
+                        </ul>
+                    </section>
+                </section>
+
+                <section>
+                    <h2>THE END</h2>
+                    <p>Questions?</p>
+                    <ul>
+                        <li>Twitter: <a href="https://twitter.com/JoshMock">@JoshMock</a></li>
+                        <li>Email: <a href="mailto:josh@joshmock.com">josh@joshmock.com</a></li>
+                        <li>Link to all this stuff: somewhere</li>
+                    </ul>
+                </section>
+            </div>
+
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: "linear",
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+                    // { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
+</html>
