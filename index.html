@@ -55,6 +55,7 @@
                         <li class="fragment">Write code to test code</li>
                         <li class="fragment">Ensures code works as expected</li>
                         <li class="fragment">Granular, single-focus assertions</li>
+                        <li class="fragment">Not a substitute for QA</li>
                     </ul>
                 </section>
 
@@ -65,6 +66,7 @@
                         <li class="fragment">Easier refactoring</li>
                         <li class="fragment">Less regression</li>
                         <li class="fragment">Less complexity</li>
+                        <li class="fragment">TDD is fun!</li>
                     </ul>
                 </section>
 
@@ -299,6 +301,7 @@ define("asyncSort", function () {
                 <section>
                     <section>
                         <h2>Sinon.js</h2>
+                        <pre><code data-trim>npm install -g sinon</code></pre>
                     </section>
 
                     <section>
@@ -311,6 +314,13 @@ it("runs jQuery.ajax", function () {
     doAjaxCall();
     assert($.ajax.calledOnce);
     $.ajax.restore();
+});
+
+it("does some thing that takes forever", function () {
+    someGlobal.slowFunction = sinon.spy();
+    callSlowFunction();
+    assert.equal(someGlobal.slowFunction.callCount, 1);
+    assert(someGlobal.slowFunction.calledWith(1, "two", 3));
 });
 </code></pre>
                     </section>
@@ -433,7 +443,7 @@ it("should change div background color to blue", function () {
                     <ul>
                         <li>Twitter: <a href="https://twitter.com/JoshMock">@JoshMock</a></li>
                         <li>Email: <a href="mailto:josh@joshmock.com">josh@joshmock.com</a></li>
-                        <li>Link to all this stuff: somewhere</li>
+                        <li><a href="https://github.com/JoshMock/mocha-node-slides">github.com/JoshMock/mocha-node-slides</a></li>
                     </ul>
                 </section>
             </div>
